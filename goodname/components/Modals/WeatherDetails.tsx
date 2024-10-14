@@ -20,7 +20,7 @@ export function WeatherDetails({ userObject }: Props): React.ReactNode {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="text-black hover:text-red-400 hover:bg-white">Weather details</Button>
+        <Button variant="outline" className="text-black hover:text-red-400 hover:bg-white whitespace-normal h-auto">Weather details</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
