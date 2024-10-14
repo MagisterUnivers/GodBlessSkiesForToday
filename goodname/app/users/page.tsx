@@ -9,9 +9,7 @@ export default function Users() {
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    getUsersAction(setUsersData, setLoading).then((res) => {
-      console.log(res, "res")
-    }).catch((err) => console.error(err))
+    getUsersAction(setUsersData, setLoading).catch((err) => console.error(err))
   }, [])
 
   if (usersData === null) return null
