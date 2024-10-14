@@ -3,6 +3,7 @@
 import { UserCard } from "@/components/Cards/UserCard"
 import { useEffect, useState } from "react"
 import { getUsersAction } from "../actions"
+import { nanoid } from 'nanoid'
 import { Button } from "@/components/ui/button"
 
 export default function Users() {
@@ -37,12 +38,9 @@ export default function Users() {
           {loading ?
             <div>Loading...</div>
             : <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {usersData?.map((user, index) => (
+              {usersData?.map((user) => (
                 <UserCard
-                  key={
-                    (user.id.value && user.id.value !== '' ? user.id.value : index.toString()) +
-                    (user.id.name && user.id.name !== '' ? user.id.name : (index + 1).toString())
-                  }
+                  key={nanoid()}
                   userObject={user} />
               ))}
             </ul>

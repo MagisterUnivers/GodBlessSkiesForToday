@@ -4,6 +4,7 @@ import { Cloud, CloudRainWind, SunMedium } from "lucide-react"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { useEffect, useState } from "react"
+import { WeatherDetails } from "../Modals/WeatherDetails"
 
 interface Props {
   userObject: UserObject | null
@@ -88,9 +89,9 @@ export function UserCard({ userObject }: Props): React.ReactNode {
       </div>
       <div className="flex gap-2 mt-3">
         <Button variant="outline" className={saveButtonStyles} onClick={() => handleSaveUser()}>
-          {isUserSaved ? 'Remove button' : 'Save button'}
+          {isUserSaved ? 'Remove from favourites' : 'Save to favourites'}
         </Button>
-        <Button variant="outline" className="text-black hover:text-red-400">Details button</Button>
+        <WeatherDetails userObject={userObject} />
       </div>
     </div>
   )
