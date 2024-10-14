@@ -16,8 +16,8 @@ interface Props {
 export function UserCard({ userObject, onItemDelete, onFavStateChange }: Props): React.ReactNode {
   const [isUserSaved, setIsUserSaved] = useState<boolean>(false)
   const saveButtonStyles = isUserSaved
-    ? 'text-red-400 font-semibold hover:bg-white'
-    : 'text-black hover:text-red-400 hover:bg-white'
+    ? 'text-red-400 font-semibold hover:bg-white whitespace-normal h-auto'
+    : 'text-black hover:text-red-400 hover:bg-white whitespace-normal h-auto'
 
   function checkIfUserIsSaved(): void {
     const savedUsers = localStorage.getItem('savedUsers')
@@ -62,7 +62,7 @@ export function UserCard({ userObject, onItemDelete, onFavStateChange }: Props):
           className="w-full h-auto min-w-[200px] min-h-[200px]"
         />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full overflow-hidden">
         <h2 className="text-black"><span className="font-bold">Name:</span> {userObject.name.first + ' ' + userObject.name.last}</h2>
         <p className="text-black"><span className="font-bold">Gender:</span> {userObject.gender}</p>
         <p className="text-black"><span className="font-bold">Email:</span> {userObject.email}</p>

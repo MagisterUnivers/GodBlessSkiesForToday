@@ -23,6 +23,7 @@ export default function Users() {
         .then((res) => setSeedData(res as string))
         .catch((err) => console.error(err))
     } else {
+      setLoading(true)
       getUsersAction(amountOfUsers, amountOfUsers / amountOfUsers, seedData, false, setUsersData, setLoading)
         .then((res) => setSeedData(res as string))
         .catch((err) => console.error(err))
@@ -50,7 +51,8 @@ export default function Users() {
           }
           <Button
             variant='destructive'
-            className="mx-auto font-semibold"
+            className="mx-auto font-semibold disabled:cursor-not-allowed"
+            disabled={loading}
             onClick={() => handleIncreaseAmountOfUsers()}
           >Load More...</Button>
         </div>
