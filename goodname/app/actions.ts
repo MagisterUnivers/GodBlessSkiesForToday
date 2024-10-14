@@ -1,9 +1,6 @@
-// https://randomuser.me/api/
-
 import { Dispatch, SetStateAction } from "react"
 
 export async function getUsersAction(
-  // queryParams: QueryParams,
   setStateFunc: Dispatch<SetStateAction<UserObject[] | null>>,
   setLoadingState: Dispatch<SetStateAction<boolean>>
 ): Promise<void> {

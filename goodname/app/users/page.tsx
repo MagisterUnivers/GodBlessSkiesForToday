@@ -14,10 +14,6 @@ export default function Users() {
     }).catch((err) => console.error(err))
   }, [])
 
-  useEffect(() => {
-    console.log(usersData, 'usersData')
-  }, [usersData])
-
   if (usersData === null) return null
 
   return (

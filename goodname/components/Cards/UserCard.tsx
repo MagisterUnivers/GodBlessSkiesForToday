@@ -2,7 +2,6 @@
 
 import { Cloud, CloudRainWind, SunMedium } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
 import { Button } from "../ui/button"
 
 interface Props {
@@ -10,7 +9,6 @@ interface Props {
 }
 
 export function UserCard({ userObject }: Props): React.ReactNode {
-  // const [weatherCode, setWeatherCode] = useState<number>(60)
 
   if (userObject === null) return null
 
@@ -29,16 +27,23 @@ export function UserCard({ userObject }: Props): React.ReactNode {
           className="w-full h-full min-w-[200px] min-h-[200px]"
         />
       </div>
-      <div className="h-auto w-auto flex gap-1 justify-center items-center">
-        {userObject.weather.current_weather.weathercode > 0 && userObject.weather.current_weather.weathercode < 60
-          ? <Cloud className="stroke-black" />
-          : userObject.weather.current_weather.weathercode >= 60 ?
-            <CloudRainWind className="stroke-black" />
-            : <SunMedium className="stroke-black" />
-        }
-        <p className="w-full text-black">
-          {userObject.location.country + ' ' + userObject.location.city + ', ' + userObject.location.postcode}
-        </p>
+      <div className="flex flex-col gap-2 items-center justify-center">
+        <div className="h-auto w-auto flex gap-1 justify-center items-center">
+          {userObject.weather.current_weather.weathercode > 0 && userObject.weather.current_weather.weathercode < 60
+            ? <Cloud className="stroke-black" />
+            : userObject.weather.current_weather.weathercode >= 60 ?
+              <CloudRainWind className="stroke-black" />
+              : <SunMedium className="stroke-black" />
+          }
+          <p className="w-full text-black">
+            {userObject.location.country + ' ' + userObject.location.city + ', ' + userObject.location.postcode}
+          </p>
+        </div>
+        <div className="flex flex-col">
+          <p>Current temperature: {userObject.weather.current_weather.temperature} °C</p>
+          <p>Maximum temperature: {userObject.weather.daily.temperature_2m_max[0]} °C</p>
+          <p>Minimum temperature: {userObject.weather.daily.temperature_2m_min[0]} °C</p>
+        </div>
       </div>
       <div className="flex gap-2 mt-3">
         <Button variant="outline" className="text-black hover:text-red-400">Save button</Button>
