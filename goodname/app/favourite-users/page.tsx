@@ -2,7 +2,6 @@
 
 import { UserCard } from "@/components/Cards/UserCard"
 import { useEffect, useState } from "react"
-import { nanoid } from 'nanoid'
 import { Header } from "@/components/Header/Header"
 
 export default function Users() {
