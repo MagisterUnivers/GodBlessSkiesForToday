@@ -5,12 +5,15 @@ import Image from "next/image"
 import { Button } from "../ui/button"
 import { useEffect, useState } from "react"
 import { WeatherDetails } from "../Modals/WeatherDetails"
+import { nanoid } from "nanoid"
 
 interface Props {
   userObject: UserObject | null
+  onItemDelete?: (id: string) => void
+  onFavStateChange?: (func1: () => void, func2: () => void) => void
 }
 
-export function UserCard({ userObject }: Props): React.ReactNode {
+export function UserCard({ userObject, onItemDelete, onFavStateChange }: Props): React.ReactNode {
   const [isUserSaved, setIsUserSaved] = useState<boolean>(false)
   const saveButtonStyles = isUserSaved
     ? 'text-red-400 font-semibold hover:bg-white'
@@ -30,11 +33,12 @@ export function UserCard({ userObject }: Props): React.ReactNode {
     const usersArray = savedUsers ? JSON.parse(savedUsers) : []
 
     if (isUserSaved) {
-      const updatedUsers = usersArray.filter((user: UserObject) => user.id.value !== userObject?.id.value)
+      const updatedUsers = usersArray.filter((user: UserObject) => user.customId !== userObject?.customId)
       localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
       setIsUserSaved(false)
     } else {
-      usersArray.push(userObject)
+      const userWithCustomId = { ...userObject, customId: nanoid() }
+      usersArray.push(userWithCustomId)
       localStorage.setItem('savedUsers', JSON.stringify(usersArray))
       setIsUserSaved(true)
     }
@@ -88,7 +92,12 @@ export function UserCard({ userObject }: Props): React.ReactNode {
         </div>
       </div>
       <div className="flex gap-2 mt-3">
-        <Button variant="outline" className={saveButtonStyles} onClick={() => handleSaveUser()}>
+        <Button
+          variant="outline"
+          className={saveButtonStyles}
+          onClick={() => onFavStateChange !== undefined
+            ? onFavStateChange(handleSaveUser, () => onItemDelete?.(userObject.customId))
+            : handleSaveUser()}>
           {isUserSaved ? 'Remove from favourites' : 'Save to favourites'}
         </Button>
         <WeatherDetails userObject={userObject} />

@@ -19,6 +19,7 @@ declare interface UserObject {
     name: string
     value: string
   }
+  customId: string
   picture: {
     large: string
     medium: string
