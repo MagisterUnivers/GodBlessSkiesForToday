@@ -3,12 +3,42 @@
 import { Cloud, CloudRainWind, SunMedium } from "lucide-react"
 import Image from "next/image"
 import { Button } from "../ui/button"
+import { useEffect, useState } from "react"
 
 interface Props {
   userObject: UserObject | null
 }
 
 export function UserCard({ userObject }: Props): React.ReactNode {
+  const [isUserSaved, setIsUserSaved] = useState<boolean>(false)
+
+  function checkIfUserIsSaved(): void {
+    const savedUsers = localStorage.getItem('savedUsers')
+    if (savedUsers) {
+      const usersArray = JSON.parse(savedUsers) as UserObject[]
+      const userExists = usersArray.some((user) => user.id.value === userObject?.id.value)
+      setIsUserSaved(userExists)
+    }
+  }
+
+  function handleSaveUser(): void {
+    const savedUsers = localStorage.getItem('savedUsers')
+    const usersArray = savedUsers ? JSON.parse(savedUsers) : []
+
+    if (isUserSaved) {
+      const updatedUsers = usersArray.filter((user: UserObject) => user.id.value !== userObject?.id.value)
+      localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+      setIsUserSaved(false)
+    } else {
+      usersArray.push(userObject)
+      localStorage.setItem('savedUsers', JSON.stringify(usersArray))
+      setIsUserSaved(true)
+    }
+  }
+
+  useEffect(() => {
+    checkIfUserIsSaved()
+  }, [])
 
   if (userObject === null) return null
 
@@ -25,9 +55,9 @@ export function UserCard({ userObject }: Props): React.ReactNode {
         />
       </div>
       <div className="flex flex-col">
-        <h2 className="text-black"><strong>Name:</strong> {userObject.name.first + ' ' + userObject.name.last}</h2>
-        <p className="text-black"><strong>Gender:</strong> {userObject.gender}</p>
-        <p className="text-black"><strong>Email:</strong> {userObject.email}</p>
+        <h2 className="text-black"><span className="font-bold">Name:</span> {userObject.name.first + ' ' + userObject.name.last}</h2>
+        <p className="text-black"><span className="font-bold">Gender:</span> {userObject.gender}</p>
+        <p className="text-black"><span className="font-bold">Email:</span> {userObject.email}</p>
       </div>
       <div className="w-auto h-auto flex flex-col gap-3 justify-center items-center">
         <h3 className="text-black text-2xl font-semibold">Weather information</h3>
@@ -47,14 +77,16 @@ export function UserCard({ userObject }: Props): React.ReactNode {
             </div>
           </div>
           <div className="flex flex-col">
-            <p><strong>Current temperature:</strong> {userObject.weather.current_weather.temperature} °C</p>
-            <p><strong>Maximum temperature:</strong> {userObject.weather.daily.temperature_2m_max[0]} °C</p>
-            <p><strong>Minimum temperature:</strong> {userObject.weather.daily.temperature_2m_min[0]} °C</p>
+            <p><span className="font-bold">Current temperature:</span> {userObject.weather.current_weather.temperature} °C</p>
+            <p><span className="font-bold">Maximum temperature:</span> {userObject.weather.daily.temperature_2m_max[0]} °C</p>
+            <p><span className="font-bold">Minimum temperature:</span> {userObject.weather.daily.temperature_2m_min[0]} °C</p>
           </div>
         </div>
       </div>
       <div className="flex gap-2 mt-3">
-        <Button variant="outline" className="text-black hover:text-red-400">Save button</Button>
+        <Button variant="outline" className="text-black hover:text-red-400" onClick={() => handleSaveUser()}>
+          {isUserSaved ? 'Remove button' : 'Save button'}
+        </Button>
         <Button variant="outline" className="text-black hover:text-red-400">Details button</Button>
       </div>
     </div>
