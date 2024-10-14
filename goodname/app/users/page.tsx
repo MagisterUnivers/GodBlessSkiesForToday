@@ -6,6 +6,7 @@ import { getUsersAction } from "../actions"
 import { nanoid } from 'nanoid'
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/Header/Header"
+import { BackToTop } from "@/components/Buttons/BackToTop"
 
 export default function Users() {
   const [amountOfUsers, setAmountOfUsers] = useState<number>(10)
@@ -25,7 +26,15 @@ export default function Users() {
     } else {
       setLoading(true)
       getUsersAction(amountOfUsers, amountOfUsers / amountOfUsers, seedData, false, setUsersData, setLoading)
-        .then((res) => setSeedData(res as string))
+        .then((res) => {
+          setSeedData(res as string)
+          setTimeout(() => {
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: 'smooth'
+            })
+          }, 500)
+        })
         .catch((err) => console.error(err))
     }
   }, [amountOfUsers])
@@ -37,7 +46,7 @@ export default function Users() {
       <header>
         <Header />
       </header>
-      <main className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="relative grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <div className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
           {loading ?
             <div>Loading...</div>
@@ -56,6 +65,7 @@ export default function Users() {
             onClick={() => handleIncreaseAmountOfUsers()}
           >Load More...</Button>
         </div>
+        <BackToTop />
       </main>
       <footer />
     </>

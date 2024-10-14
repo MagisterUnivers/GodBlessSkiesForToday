@@ -95,9 +95,16 @@ export function UserCard({ userObject, onItemDelete, onFavStateChange }: Props):
         <Button
           variant="outline"
           className={saveButtonStyles}
-          onClick={() => onFavStateChange !== undefined
-            ? onFavStateChange(handleSaveUser, () => onItemDelete?.(userObject.customId))
-            : handleSaveUser()}>
+          onClick={() => {
+            if (onFavStateChange !== undefined) {
+              const isConfirmed = window.confirm("Are you sure, that you want to delete that user from favourites?")
+              if (isConfirmed) {
+                onFavStateChange(handleSaveUser, () => onItemDelete?.(userObject.customId))
+              }
+            } else {
+              handleSaveUser()
+            }
+          }}>
           {isUserSaved ? 'Remove from favourites' : 'Save to favourites'}
         </Button>
         <WeatherDetails userObject={userObject} />

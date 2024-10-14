@@ -3,6 +3,7 @@
 import { UserCard } from "@/components/Cards/UserCard"
 import { useEffect, useState } from "react"
 import { Header } from "@/components/Header/Header"
+import { BackToTop } from "@/components/Buttons/BackToTop"
 
 export default function Users() {
   const [savedUsers, setSavedUsers] = useState<UserObject[]>([])
@@ -30,7 +31,7 @@ export default function Users() {
       <header>
         <Header />
       </header>
-      <main className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="relative grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <div className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
           {savedUsers.length === 0 ?
             (
@@ -47,6 +48,7 @@ export default function Users() {
               </ul>
             )}
         </div>
+        <BackToTop />
       </main>
       <footer />
     </>
