@@ -1,11 +1,15 @@
 import { Dispatch, SetStateAction } from "react"
 
 export async function getUsersAction(
+  amountOfUsers: number,
+  page: number | null,
+  seed: string | null,
+  isFirstLoad: boolean,
   setStateFunc: Dispatch<SetStateAction<UserObject[] | null>>,
   setLoadingState: Dispatch<SetStateAction<boolean>>
-): Promise<void> {
+): Promise<string | void> {
   try {
-    const usersResponse = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}?results=10&inc=id,gender,name,location,email,picture`, {
+    const usersResponse = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}?results=${amountOfUsers}&page=${page}&seed=${seed}&inc=id,gender,name,location,email,picture`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -17,7 +21,7 @@ export async function getUsersAction(
       throw new Error('Failed to get users data.')
     }
 
-    const { results: users } = await usersResponse.json()
+    const { results: users, info: fetchInfo } = await usersResponse.json()
 
     const usersWithWeatherPromises = users.map(async (user: UserObject) => {
       const { latitude, longitude } = user.location.coordinates
@@ -41,7 +45,13 @@ export async function getUsersAction(
 
     const usersWithWeather = await Promise.all(usersWithWeatherPromises)
 
-    setStateFunc(usersWithWeather as UserObject[])
+    if (isFirstLoad) {
+      setStateFunc(usersWithWeather as UserObject[]);
+    } else {
+      setStateFunc((prevUsers) => [...(prevUsers || []), ...usersWithWeather] as UserObject[]);
+    }
+
+    return fetchInfo.seed
   } catch (error) {
     console.error('Error sending data to backend:', error)
   } finally {

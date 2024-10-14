@@ -11,6 +11,9 @@ interface Props {
 
 export function UserCard({ userObject }: Props): React.ReactNode {
   const [isUserSaved, setIsUserSaved] = useState<boolean>(false)
+  const saveButtonStyles = isUserSaved
+    ? 'text-red-400 font-semibold hover:bg-white'
+    : 'text-black hover:text-red-400 hover:bg-white'
 
   function checkIfUserIsSaved(): void {
     const savedUsers = localStorage.getItem('savedUsers')
@@ -84,7 +87,7 @@ export function UserCard({ userObject }: Props): React.ReactNode {
         </div>
       </div>
       <div className="flex gap-2 mt-3">
-        <Button variant="outline" className="text-black hover:text-red-400" onClick={() => handleSaveUser()}>
+        <Button variant="outline" className={saveButtonStyles} onClick={() => handleSaveUser()}>
           {isUserSaved ? 'Remove button' : 'Save button'}
         </Button>
         <Button variant="outline" className="text-black hover:text-red-400">Details button</Button>

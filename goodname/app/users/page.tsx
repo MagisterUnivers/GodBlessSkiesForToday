@@ -3,14 +3,29 @@
 import { UserCard } from "@/components/Cards/UserCard"
 import { useEffect, useState } from "react"
 import { getUsersAction } from "../actions"
+import { Button } from "@/components/ui/button"
 
 export default function Users() {
+  const [amountOfUsers, setAmountOfUsers] = useState<number>(10)
+  const [seedData, setSeedData] = useState<string | null>(null)
   const [usersData, setUsersData] = useState<UserObject[] | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
 
+  function handleIncreaseAmountOfUsers(): void {
+    setAmountOfUsers(prev => prev + 10)
+  }
+
   useEffect(() => {
-    getUsersAction(setUsersData, setLoading).catch((err) => console.error(err))
-  }, [])
+    if (amountOfUsers === 10) {
+      getUsersAction(amountOfUsers, amountOfUsers / amountOfUsers, seedData, true, setUsersData, setLoading)
+        .then((res) => setSeedData(res as string))
+        .catch((err) => console.error(err))
+    } else {
+      getUsersAction(amountOfUsers, amountOfUsers / amountOfUsers, seedData, false, setUsersData, setLoading)
+        .then((res) => setSeedData(res as string))
+        .catch((err) => console.error(err))
+    }
+  }, [amountOfUsers])
 
   if (usersData === null) return null
 
@@ -22,11 +37,21 @@ export default function Users() {
           {loading ?
             <div>Loading...</div>
             : <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {usersData?.map((user) => (
-                <UserCard key={Number(user.id.value)} userObject={user} />
+              {usersData?.map((user, index) => (
+                <UserCard
+                  key={
+                    (user.id.value && user.id.value !== '' ? user.id.value : index.toString()) +
+                    (user.id.name && user.id.name !== '' ? user.id.name : (index + 1).toString())
+                  }
+                  userObject={user} />
               ))}
             </ul>
           }
+          <Button
+            variant='destructive'
+            className="mx-auto font-semibold"
+            onClick={() => handleIncreaseAmountOfUsers()}
+          >Load More...</Button>
         </div>
       </main>
       <footer />
