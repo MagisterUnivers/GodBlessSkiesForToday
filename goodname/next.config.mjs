@@ -4,6 +4,10 @@ const remotePatterns = [
   {
     hostname: 'localhost',
     port: ''
+  },
+  {
+    hostname: 'randomuser.me',
+    port: ''
   }
 ]
 
